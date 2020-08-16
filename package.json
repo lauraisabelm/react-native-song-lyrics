@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "ts": "tsc --watch --noEmit --skipLibCheck"
   },
   "dependencies": {
     "react": "16.13.1",
@@ -24,11 +25,26 @@
     "@typescript-eslint/parser": "^2.27.0",
     "babel-jest": "^25.1.0",
     "eslint": "^6.5.1",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "husky": "3.0.9",
     "jest": "^25.1.0",
+    "lint-staged": "^10.2.11",
     "metro-react-native-babel-preset": "^0.59.0",
-    "react-test-renderer": "16.13.1",
     "prettier": "^2.0.4",
+    "react-test-renderer": "16.13.1",
     "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc --noEmit --skipLibCheck && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json}": [
+      "prettier \"src/**/*.{js,jsx,json,tsx,ts}\" --write",
+      "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+      "git add"
+    ]
   },
   "jest": {
     "preset": "react-native",
