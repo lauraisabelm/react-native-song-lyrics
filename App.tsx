@@ -7,12 +7,17 @@
  *
  * @format
  */
-
+import 'react-native-gesture-handler';
 import React from 'react';
-import { Search } from './src/screens';
+import { NavigationContainer } from '@react-navigation/native';
+import MainNavigator from './src/navigation/MainNavigator';
 
 const App = () => {
-  return <Search />;
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
 };
 
 export default App;

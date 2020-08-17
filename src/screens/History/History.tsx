@@ -7,17 +7,17 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainTabsParamList } from '../../navigation/TabNavigator';
 import { RootStackParamList } from '../../navigation/MainNavigator';
 
-type SearchNavigationProps = CompositeNavigationProp<
-  BottomTabNavigationProp<MainTabsParamList, 'Search'>,
+type HistoryNavigationProps = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabsParamList, 'History'>,
   StackNavigationProp<RootStackParamList>
 >;
 
-const Search = ({ navigation }: { navigation: SearchNavigationProps }) => {
-  return (
-    <>
-      <Text onPress={() => navigation.navigate('SongLyric')}>Search</Text>
-    </>
-  );
+interface Props {
+  navigation: HistoryNavigationProps;
+}
+
+const History = ({ navigation }: Props) => {
+  return <Text onPress={() => navigation.navigate('SongLyric')}>History</Text>;
 };
 
-export default Search;
+export default History;
