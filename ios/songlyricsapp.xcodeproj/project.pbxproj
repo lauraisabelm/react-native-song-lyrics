@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		15EF9C2124EB7F0500E7648F /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15EF9C2024EB78AA00E7648F /* MaterialIcons.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -49,6 +50,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = songlyricsapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = songlyricsapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = songlyricsapp/main.m; sourceTree = "<group>"; };
+		15EF9C2024EB78AA00E7648F /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* songlyricsapp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "songlyricsapp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* songlyricsapp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "songlyricsapp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		77A9D618E41DEA7F69E8796D /* Pods-songlyricsapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-songlyricsapp.release.xcconfig"; path = "Target Support Files/Pods-songlyricsapp/Pods-songlyricsapp.release.xcconfig"; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 		13B07FAE1A68108700A75B9A /* songlyricsapp */ = {
 			isa = PBXGroup;
 			children = (
+				15EF9C1F24EB789C00E7648F /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -126,6 +129,14 @@
 			name = songlyricsapp;
 			sourceTree = "<group>";
 		};
+		15EF9C1F24EB789C00E7648F /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				15EF9C2024EB78AA00E7648F /* MaterialIcons.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		19D3F98C146ED0D88049B234 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,7 +145,6 @@
 				F297FBBE3E4CB6226445F826 /* Pods-songlyricsapp-songlyricsappTests.debug.xcconfig */,
 				97EF0ACC2DD7E7E2A10A4BF1 /* Pods-songlyricsapp-songlyricsappTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -322,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15EF9C2124EB7F0500E7648F /* MaterialIcons.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);

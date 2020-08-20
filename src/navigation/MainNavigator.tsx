@@ -8,14 +8,14 @@ export type RootStackParamList = {
   SongLyric: undefined;
 };
 
-const { Navigator, Screen } = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 const MainNavigator = () => {
   return (
-    <Navigator initialRouteName="MainTabs">
-      <Screen name="MainTabs" component={TabNavigator} />
-      <Screen name="SongLyric" component={SongLyric} />
-    </Navigator>
+    <Stack.Navigator initialRouteName="MainTabs" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MainTabs" component={TabNavigator} />
+      <Stack.Screen name="SongLyric" component={SongLyric} />
+    </Stack.Navigator>
   );
 };
 

@@ -7,6 +7,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainTabsParamList } from '../../navigation/TabNavigator';
 import { RootStackParamList } from '../../navigation/MainNavigator';
 
+import { Container } from '../../components';
+
 type SearchNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabsParamList, 'Search'>,
   StackNavigationProp<RootStackParamList>
@@ -15,7 +17,9 @@ type SearchNavigationProps = CompositeNavigationProp<
 const Search = ({ navigation }: { navigation: SearchNavigationProps }) => {
   return (
     <>
-      <Text onPress={() => navigation.navigate('SongLyric')}>Search</Text>
+      <Container>
+        <Text onPress={() => navigation.navigate('SongLyric')}>Search</Text>
+      </Container>
     </>
   );
 };
