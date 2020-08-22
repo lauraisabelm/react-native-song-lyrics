@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, Text } from 'react-native';
+import { StatusBar } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,6 +10,7 @@ import { Header, Space, Typography } from '../../components';
 
 // RESOURCES
 import { Content, MainContainer, SafeArea } from './styles';
+import { colors } from '../../utils/theme';
 
 type SongLyricNavigationProp = StackNavigationProp<RootStackParamList, 'SongLyric'>;
 
@@ -27,11 +28,18 @@ const SongLyric = ({ navigation }: Props) => {
       <SafeArea />
       <StatusBar barStyle="light-content" />
       <MainContainer>
-        <Header onPressArrow={goBackHandler} title="Lyrics" />
+        <Header backgroundColor={colors.blue} onPressArrow={goBackHandler} title="Lyric" />
         <Content>
-          <Typography size={25}>Song</Typography>
+          <Typography color={colors.darkGray} size={30}>
+            Song
+          </Typography>
+          <Typography color={colors.grey} size={20}>
+            Artist
+          </Typography>
           <Space thickness={25} />
-          <Text>Song Lyric</Text>
+          <Typography color={colors.dimGray} size={18}>
+            Song Lyric
+          </Typography>
         </Content>
       </MainContainer>
     </>

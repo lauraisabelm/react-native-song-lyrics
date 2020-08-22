@@ -1,7 +1,8 @@
-import { StyleSheet } from 'react-native';
-
 //LIBS
 import styled from 'styled-components/native';
+
+// COMPONENTS
+import { Typography } from '../../components';
 
 // RESOURCES
 import { colors } from '../../utils/theme';
@@ -17,12 +18,10 @@ export const MainContainer = styled.View({
   flex: 1,
 });
 
-export const NativeStyles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: colors.blue,
-  },
-});
-
 export const SafeArea = styled.SafeAreaView({
   backgroundColor: colors.blue,
+});
+
+export const Title = styled(Typography)({
+  fontWeight: 'normal',
 });

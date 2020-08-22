@@ -6,25 +6,36 @@ import { TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // COMPONENTS
-import { Container, Title } from './styles';
+import { Container, NativeStyles, Title } from './styles';
 import { colors } from '../../utils/theme';
 
 interface Props {
-  onPressArrow: () => void;
+  backgroundColor: string;
+  colorTitle: string;
+  onPressArrow?: () => void;
   title: string;
+  withoutArrow: boolean;
 }
 
-const Header = ({ onPressArrow, title }: Props) => {
+const Header = ({ backgroundColor, colorTitle, onPressArrow, title, withoutArrow }: Props) => {
   return (
-    <Container>
-      <TouchableWithoutFeedback onPress={onPressArrow}>
-        <Icon color={colors.white} name="arrow-back" size={30} />
-      </TouchableWithoutFeedback>
-      <Title color={colors.white} size={20} textAlign="center">
+    <Container backgroundColor={backgroundColor} style={NativeStyles.shadow}>
+      {!withoutArrow && (
+        <TouchableWithoutFeedback onPress={onPressArrow}>
+          <Icon color={colors.white} name="arrow-back" size={30} />
+        </TouchableWithoutFeedback>
+      )}
+      <Title color={colorTitle} size={20} textAlign="center">
         {title}
       </Title>
     </Container>
   );
+};
+
+Header.defaultProps = {
+  backgroundColor: colors.blue,
+  colorTitle: colors.white,
+  withoutArrow: false,
 };
 
 export default Header;
