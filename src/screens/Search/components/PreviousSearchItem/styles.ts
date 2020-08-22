@@ -36,7 +36,7 @@ export const IconContainer = styled.View({
 });
 
 export const ItemContainer = styled.TouchableOpacity({
-  backgroundColor: colors.whiteOpacity,
+  backgroundColor: colors.white,
   borderRadius: 20,
   padding: 20,
   width: '100%',

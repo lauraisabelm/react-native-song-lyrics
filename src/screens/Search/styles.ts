@@ -11,7 +11,12 @@ import { colors } from '../../utils/theme';
 
 export const BackgroundContainer = styled.ImageBackground({
   flex: 1,
-  paddingHorizontal: 20,
+});
+
+export const ConnectivityContainer = styled.View({
+  backgroundColor: colors.orange,
+  height: 60,
+  justifyContent: 'center',
 });
 
 export const FormContainer = styled.View({
@@ -31,6 +36,14 @@ export const NativeStyles = StyleSheet.create({
   mainContainer: {
     backgroundColor: colors.white,
   },
+  scroll: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+  },
+});
+
+export const Scroll = styled.ScrollView({
+  flex: 1,
 });
 
 export const SearchButton = styled.TouchableOpacity(({ disabled }: { disabled: boolean }) => ({

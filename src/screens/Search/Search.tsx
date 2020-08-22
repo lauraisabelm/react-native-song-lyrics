@@ -1,10 +1,11 @@
 import React, { ComponentType, useCallback, useState } from 'react';
-import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, StatusBar, TouchableWithoutFeedback } from 'react-native';
 
 // LIBS
 import { compose } from 'redux';
 import { Field, InjectedFormProps, reduxForm } from 'redux-form';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 // NAVIGATION
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -20,9 +21,11 @@ import PreviousSearchItem from './components/PreviousSearchItem';
 // RESOURCES
 import {
   BackgroundContainer,
+  ConnectivityContainer,
   FormContainer,
   LogoImage,
   NativeStyles,
+  Scroll,
   SearchButton,
   Title,
 } from './styles';
@@ -45,8 +48,18 @@ type Props = PropsFromRedux & {
   navigation: SearchNavigationProps;
 };
 
+const ConnectivyComponent = () => (
+  <ConnectivityContainer>
+    <Typography color={colors.white} size={18} textAlign="center">
+      No internet Connection
+    </Typography>
+  </ConnectivityContainer>
+);
+
 const Search = ({ navigation }: Props) => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const netInfo = useNetInfo();
+  const { isConnected } = netInfo;
 
   const goToLyric = () => {
     navigation.navigate('SongLyric');
@@ -57,36 +70,40 @@ const Search = ({ navigation }: Props) => {
   }, []);
 
   return (
-    <Container style={NativeStyles.mainContainer}>
+    <Container style={{ backgroundColor: isConnected ? colors.white : colors.orange }}>
+      <StatusBar barStyle={isConnected ? 'dark-content' : 'light-content'} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <BackgroundContainer resizeMode="cover" source={Background}>
-          <LogoImage resizeMode="contain" source={Logo} />
-          <Title color={colors.orange} size={40}>
-            Search
-          </Title>
-          <Typography color={colors.orange} size={30}>
-            Your Lyric ♫
-          </Typography>
-          <FormContainer>
-            <Field
-              name="artist"
-              placeholder="Artist"
-              component={CustomTextInput}
-              validate={[required]}
-            />
-            <Space />
-            <Field
-              name="song"
-              placeholder="Song"
-              component={CustomTextInput}
-              validate={[required]}
-            />
-            <Space thickness={60} />
-            <SearchButton disabled={false} onPress={goToLyric}>
-              <Icon color={colors.white} name="search" size={40} />
-            </SearchButton>
-          </FormContainer>
-          {false && <PreviousSearchItem artist="Hola" song="Hola" />}
+          {!isConnected && ConnectivyComponent()}
+          <Scroll contentContainerStyle={NativeStyles.scroll}>
+            <LogoImage resizeMode="contain" source={Logo} />
+            <Title color={colors.orange} size={40}>
+              Search
+            </Title>
+            <Typography color={colors.orange} size={30}>
+              {isConnected ? 'Your Lyric ♫' : 'Not Available'}
+            </Typography>
+            <FormContainer>
+              <Field
+                name="artist"
+                placeholder="Artist"
+                component={CustomTextInput}
+                validate={[required]}
+              />
+              <Space />
+              <Field
+                name="song"
+                placeholder="Song"
+                component={CustomTextInput}
+                validate={[required]}
+              />
+              <Space thickness={isConnected ? 60 : 30} />
+              <SearchButton disabled={!isConnected} onPress={goToLyric}>
+                <Icon color={colors.white} name="search" size={40} />
+              </SearchButton>
+            </FormContainer>
+            {false && <PreviousSearchItem artist="Hola" song="Hola" />}
+          </Scroll>
         </BackgroundContainer>
       </TouchableWithoutFeedback>
       <CustomAlert

@@ -31,15 +31,19 @@ const PreviousSearchItem = ({ artist, song }: Props) => (
     <Space />
     <ItemContainer style={NativeStyles.itemContainer}>
       <Field>
-        <ArtistImage source={Singer} />
-        <FieldText size={15}>{artist}</FieldText>
-      </Field>
-      <Space />
-      <Field>
         <IconContainer>
           <Icon color={colors.blue} name="music-note" size={25} />
         </IconContainer>
-        <FieldText size={15}>{song}</FieldText>
+        <FieldText color={colors.darkGray} numberOfLines={1} size={15}>
+          {song}
+        </FieldText>
+      </Field>
+      <Space />
+      <Field>
+        <ArtistImage source={Singer} />
+        <FieldText color={colors.darkGray} size={15}>
+          {artist}
+        </FieldText>
       </Field>
     </ItemContainer>
     <Space thickness={20} />
