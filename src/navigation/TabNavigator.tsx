@@ -33,6 +33,7 @@ const navigatorTabBarOptions = {
   allowFontScalling: false,
   activeTintColor: colors.blue,
   inactiveTintColor: colors.gray,
+  keyboardHidesTabBar: true,
   labelStyle: {
     fontSize: 14,
   },

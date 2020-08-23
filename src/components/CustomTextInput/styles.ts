@@ -4,7 +4,6 @@ import { TextInput, View } from 'react-native';
 // STYLED
 import styled from 'styled-components';
 import { colors } from '../../utils/theme';
-import { isIos } from '../../utils/responsive';
 
 export const Content = styled(View)({
   width: '100%',
@@ -19,8 +18,7 @@ export const Input = styled(TextInput)({
   color: colors.blue,
   flex: 1,
   fontSize: 14,
-  paddingVertical: 0,
-  paddingTop: isIos ? 0 : 7,
+  padding: 0,
 });
 
 type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse';

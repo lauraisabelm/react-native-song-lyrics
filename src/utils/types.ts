@@ -1,6 +1,6 @@
-export interface HistorySongItem {
+export interface HistoryLyricsItem {
   artist: string;
   id: string;
-  lyric: string;
+  lyrics: string;
   song: string;
 }

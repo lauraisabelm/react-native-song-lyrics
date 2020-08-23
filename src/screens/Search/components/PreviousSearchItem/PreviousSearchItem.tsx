@@ -20,16 +20,17 @@ import { colors } from '../../../../utils/theme';
 
 interface Props {
   artist: string;
+  onPressItem: () => void;
   song: string;
 }
 
-const PreviousSearchItem = ({ artist, song }: Props) => (
+const PreviousSearchItem = ({ artist, onPressItem, song }: Props) => (
   <>
     <Typography color={colors.blue} size={25}>
       Previous Search
     </Typography>
     <Space />
-    <ItemContainer style={NativeStyles.itemContainer}>
+    <ItemContainer onPress={onPressItem} style={NativeStyles.itemContainer}>
       <Field>
         <IconContainer>
           <Icon color={colors.blue} name="music-note" size={25} />

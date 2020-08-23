@@ -1,5 +1,5 @@
 import React, { ComponentType, useCallback, useState } from 'react';
-import { Keyboard, StatusBar, TouchableWithoutFeedback } from 'react-native';
+import { ActivityIndicator, Keyboard, StatusBar, TouchableWithoutFeedback } from 'react-native';
 
 // LIBS
 import { compose } from 'redux';
@@ -7,10 +7,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Field, InjectedFormProps, reduxForm } from 'redux-form';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNetInfo } from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // NAVIGATION
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainTabsParamList } from '../../navigation/TabNavigator';
 import { RootStackParamList } from '../../navigation/MainNavigator';
@@ -35,6 +36,7 @@ import { colors } from '../../utils/theme';
 import { required } from '../../utils/validate';
 import { RootState } from '../../store';
 import { getLyrics } from '../../actions';
+import { HistoryLyricsItem } from '../../utils/types';
 
 type SearchNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabsParamList, 'Search'>,
@@ -51,6 +53,13 @@ type Props = PropsFromRedux & {
   navigation: SearchNavigationProps;
 };
 
+const lastSearchInitialValue = {
+  artist: '',
+  id: '',
+  lyrics: '',
+  song: '',
+};
+
 const ConnectivyComponent = () => (
   <ConnectivityContainer>
     <Typography color={colors.white} size={18} textAlign="center">
@@ -59,12 +68,47 @@ const ConnectivyComponent = () => (
   </ConnectivityContainer>
 );
 
-const Search = ({ getLyricsConnected, navigation, searchForm, valid }: Props) => {
+const Search = ({ getLyricsConnected, loading, navigation, searchForm, valid }: Props) => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [lastSearch, setLastSearch] = useState<HistoryLyricsItem>(lastSearchInitialValue);
+
   const netInfo = useNetInfo();
   const { isConnected } = netInfo;
 
-  const getSongLyrics = async () => {
+  const getLastSearch = useCallback(() => {
+    let history;
+    const getHistoryData = async () => {
+      try {
+        const result = await AsyncStorage.getItem('history');
+        history = result !== null ? JSON.parse(result) : [];
+        const previousData = history.length > 0 ? history[0] : lastSearchInitialValue;
+        setLastSearch(previousData);
+      } catch (err) {
+        console.log('Something wrong happened getting the history data');
+        return [];
+      }
+    };
+    getHistoryData();
+  }, []);
+
+  useFocusEffect(getLastSearch);
+
+  const goToLyrics = useCallback(
+    (songData?: HistoryLyricsItem) => {
+      if (songData) {
+        navigation.navigate('SongLyrics', { lyricsData: songData });
+      } else {
+        navigation.navigate('SongLyrics', {});
+      }
+    },
+    [navigation],
+  );
+
+  const handleModalVisibility = useCallback((value: boolean) => {
+    setModalVisible(value);
+  }, []);
+
+  const getSongLyrics = useCallback(() => {
     const { values } = searchForm;
     if (values) {
       Keyboard.dismiss();
@@ -75,15 +119,7 @@ const Search = ({ getLyricsConnected, navigation, searchForm, valid }: Props) =>
         onError: handleModalVisibility,
       });
     }
-  };
-
-  const goToLyrics = () => {
-    navigation.navigate('SongLyrics');
-  };
-
-  const handleModalVisibility = useCallback((value: boolean) => {
-    setModalVisible(value);
-  }, []);
+  }, [getLyricsConnected, goToLyrics, handleModalVisibility, searchForm]);
 
   return (
     <Container style={{ backgroundColor: isConnected ? colors.white : colors.orange }}>
@@ -100,6 +136,7 @@ const Search = ({ getLyricsConnected, navigation, searchForm, valid }: Props) =>
               {isConnected ? 'Your Lyrics ♫' : 'Not Available'}
             </Typography>
             <FormContainer>
+              <Space />
               <Field
                 name="artist"
                 placeholder="Artist"
@@ -113,12 +150,23 @@ const Search = ({ getLyricsConnected, navigation, searchForm, valid }: Props) =>
                 component={CustomTextInput}
                 validate={[required]}
               />
-              <Space thickness={isConnected ? 60 : 30} />
-              <SearchButton disabled={!isConnected || !valid} onPress={getSongLyrics}>
-                <Icon color={colors.white} name="search" size={40} />
+              <Space thickness={lastSearch.id ? 30 : 60} />
+              <SearchButton disabled={loading || !isConnected || !valid} onPress={getSongLyrics}>
+                {loading ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Icon color={colors.white} name="search" size={40} />
+                )}
               </SearchButton>
+              <Space />
             </FormContainer>
-            {false && <PreviousSearchItem artist="Hola" song="Hola" />}
+            {lastSearch.id ? (
+              <PreviousSearchItem
+                artist={lastSearch.artist}
+                onPressItem={goToLyrics.bind(null, lastSearch)}
+                song={lastSearch.song}
+              />
+            ) : null}
           </Scroll>
         </BackgroundContainer>
       </TouchableWithoutFeedback>

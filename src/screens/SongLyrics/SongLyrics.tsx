@@ -13,7 +13,7 @@ import { RouteProp } from '@react-navigation/native';
 import { Header, Space, Typography } from '../../components';
 
 // RESOURCES
-import { Content, MainContainer, SafeArea } from './styles';
+import { Content, MainContainer, NativeStyles, SafeArea } from './styles';
 import { colors } from '../../utils/theme';
 import { RootState } from '../../store';
 
@@ -25,12 +25,18 @@ type Props = {
   route: SongLyricsRouteProp;
 } & ConnectedProps<typeof connector>;
 
-const SongLyrics = ({ lyrics, navigation, searchForm }: Props) => {
+const SongLyrics = ({ lyrics, navigation, route, searchForm }: Props) => {
   let song = '';
   let artist = '';
+  let songLyrics = lyrics;
   const { values } = searchForm;
+  const { lyricsData } = route.params;
 
-  if (values) {
+  if (lyricsData) {
+    song = lyricsData.song;
+    artist = lyricsData.artist;
+    songLyrics = lyricsData.lyrics;
+  } else if (values) {
     song = values.song;
     artist = values.artist;
   }
@@ -45,7 +51,8 @@ const SongLyrics = ({ lyrics, navigation, searchForm }: Props) => {
       <StatusBar barStyle="light-content" />
       <MainContainer>
         <Header backgroundColor={colors.blue} onPressArrow={goBackHandler} title="Lyrics" />
-        <Content>
+        <Content contentContainerStyle={NativeStyles.scroll}>
+          <Space thickness={20} />
           <Typography color={colors.darkGray} size={30}>
             {song}
           </Typography>
@@ -54,7 +61,7 @@ const SongLyrics = ({ lyrics, navigation, searchForm }: Props) => {
           </Typography>
           <Space thickness={25} />
           <Typography color={colors.dimGray} size={18}>
-            {lyrics}
+            {songLyrics}
           </Typography>
         </Content>
       </MainContainer>

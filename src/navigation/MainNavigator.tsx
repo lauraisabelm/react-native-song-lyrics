@@ -2,10 +2,13 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './TabNavigator';
 import { SongLyrics } from '../screens';
+import { HistoryLyricsItem } from '../utils/types';
 
 export type RootStackParamList = {
   MainTabs: undefined;
-  SongLyrics: undefined;
+  SongLyrics: {
+    lyricsData?: HistoryLyricsItem;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

@@ -1,15 +1,14 @@
+import { StyleSheet } from 'react-native';
+
 //LIBS
 import styled from 'styled-components/native';
-
-// COMPONENTS
-import { Typography } from '../../components';
 
 // RESOURCES
 import { colors } from '../../utils/theme';
 
 export const Content = styled.ScrollView({
   flex: 1,
-  padding: 20,
+  paddingHorizontal: 20,
   width: '100%',
 });
 
@@ -18,10 +17,13 @@ export const MainContainer = styled.View({
   flex: 1,
 });
 
-export const SafeArea = styled.SafeAreaView({
-  backgroundColor: colors.blue,
+export const NativeStyles = StyleSheet.create({
+  scroll: {
+    flexGrow: 1,
+    paddingBottom: 50,
+  },
 });
 
-export const Title = styled(Typography)({
-  fontWeight: 'normal',
+export const SafeArea = styled.SafeAreaView({
+  backgroundColor: colors.blue,
 });
