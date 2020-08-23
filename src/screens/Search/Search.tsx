@@ -25,6 +25,7 @@ import {
   BackgroundContainer,
   ConnectivityContainer,
   FormContainer,
+  KAVContainer,
   LogoImage,
   NativeStyles,
   Scroll,
@@ -37,6 +38,7 @@ import { required } from '../../utils/validate';
 import { RootState } from '../../store';
 import { getLyrics } from '../../actions';
 import { HistoryLyricsItem } from '../../utils/types';
+import { isIos } from '../../utils/responsive';
 
 type SearchNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabsParamList, 'Search'>,
@@ -81,15 +83,21 @@ const Search = ({ getLyricsConnected, loading, navigation, searchForm, valid }: 
       try {
         const result = await AsyncStorage.getItem('history');
         history = result !== null ? JSON.parse(result) : [];
-        const previousData = history.length > 0 ? history[0] : lastSearchInitialValue;
-        setLastSearch(previousData);
+        if (history.length > 0) {
+          const lastItem = history[0];
+          if (lastItem.id !== lastSearch.id) {
+            setLastSearch(lastItem);
+          }
+        } else {
+          setLastSearch(lastSearchInitialValue);
+        }
       } catch (err) {
         console.log('Something wrong happened getting the history data');
         return [];
       }
     };
     getHistoryData();
-  }, []);
+  }, [lastSearch.id]);
 
   useFocusEffect(getLastSearch);
 
@@ -123,43 +131,48 @@ const Search = ({ getLyricsConnected, loading, navigation, searchForm, valid }: 
 
   return (
     <Container style={{ backgroundColor: isConnected ? colors.white : colors.orange }}>
-      <StatusBar barStyle={isConnected ? 'dark-content' : 'light-content'} />
+      <StatusBar
+        backgroundColor={colors.white}
+        barStyle={isConnected ? 'dark-content' : 'light-content'}
+      />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <BackgroundContainer resizeMode="cover" source={Background}>
           {!isConnected && ConnectivyComponent()}
           <Scroll contentContainerStyle={NativeStyles.scroll}>
-            <LogoImage resizeMode="contain" source={Logo} />
-            <Title color={colors.orange} size={40}>
-              Search
-            </Title>
-            <Typography color={colors.orange} size={30}>
-              {isConnected ? 'Your Lyrics ♫' : 'Not Available'}
-            </Typography>
-            <FormContainer>
-              <Space />
-              <Field
-                name="artist"
-                placeholder="Artist"
-                component={CustomTextInput}
-                validate={[required]}
-              />
-              <Space />
-              <Field
-                name="song"
-                placeholder="Song"
-                component={CustomTextInput}
-                validate={[required]}
-              />
-              <Space thickness={lastSearch.id ? 30 : 60} />
-              <SearchButton disabled={loading || !isConnected || !valid} onPress={getSongLyrics}>
-                {loading ? (
-                  <ActivityIndicator color={colors.white} />
-                ) : (
-                  <Icon color={colors.white} name="search" size={40} />
-                )}
-              </SearchButton>
-              <Space />
-            </FormContainer>
+            <KAVContainer behavior={isIos ? 'padding' : undefined}>
+              <LogoImage resizeMode="contain" source={Logo} />
+              <Title color={colors.orange} size={40}>
+                Search
+              </Title>
+              <Typography color={colors.orange} size={30}>
+                {isConnected ? 'Your Lyrics ♫' : 'Not Available'}
+              </Typography>
+              <FormContainer>
+                <Space />
+                <Field
+                  name="artist"
+                  placeholder="Artist"
+                  component={CustomTextInput}
+                  validate={[required]}
+                />
+                <Space />
+                <Field
+                  name="song"
+                  placeholder="Song"
+                  component={CustomTextInput}
+                  validate={[required]}
+                />
+                <Space thickness={lastSearch.id ? 30 : 60} />
+                <SearchButton disabled={loading || !isConnected || !valid} onPress={getSongLyrics}>
+                  {loading ? (
+                    <ActivityIndicator color={colors.white} />
+                  ) : (
+                    <Icon color={colors.white} name="search" size={40} />
+                  )}
+                </SearchButton>
+                <Space />
+              </FormContainer>
+            </KAVContainer>
             {lastSearch.id ? (
               <PreviousSearchItem
                 artist={lastSearch.artist}

@@ -40,15 +40,17 @@ const History = ({ navigation }: Props) => {
     const getHistoryData = async () => {
       try {
         const result = await AsyncStorage.getItem('history');
-        history = result !== null ? JSON.parse(result) : [];
-        setHistoryData(history);
+        if (result !== JSON.stringify(historyData)) {
+          history = result !== null ? JSON.parse(result) : [];
+          setHistoryData(history);
+        }
       } catch (err) {
         console.log('Something wrong happened getting the history data');
         return [];
       }
     };
     getHistoryData();
-  }, []);
+  }, [historyData]);
 
   useFocusEffect(getHistory);
 

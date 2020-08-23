@@ -48,7 +48,7 @@ const SongLyrics = ({ lyrics, navigation, route, searchForm }: Props) => {
   return (
     <>
       <SafeArea />
-      <StatusBar barStyle="light-content" />
+      <StatusBar backgroundColor={colors.blue} barStyle="light-content" />
       <MainContainer>
         <Header backgroundColor={colors.blue} onPressArrow={goBackHandler} title="Lyrics" />
         <Content contentContainerStyle={NativeStyles.scroll}>

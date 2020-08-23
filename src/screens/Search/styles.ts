@@ -25,6 +25,10 @@ export const FormContainer = styled.View({
   justifyContent: 'center',
 });
 
+export const KAVContainer = styled.KeyboardAvoidingView({
+  flex: 1,
+});
+
 export const LogoImage = styled.Image({
   height: 40,
   marginBottom: 40,
