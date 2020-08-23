@@ -1,0 +1,1 @@
+export { requestLyric } from './lyrics';

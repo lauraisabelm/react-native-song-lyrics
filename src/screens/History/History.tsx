@@ -40,7 +40,7 @@ const flatlistKeyExtractor = (item: HistorySongItem) => item.id;
 const History = ({ navigation }: Props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const goToLyric = useCallback(() => {
-    navigation.navigate('SongLyric');
+    navigation.navigate('SongLyrics');
   }, [navigation]);
 
   const flatlitsRenderItem = useCallback(

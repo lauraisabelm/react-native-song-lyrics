@@ -3,6 +3,7 @@ import { Keyboard, StatusBar, TouchableWithoutFeedback } from 'react-native';
 
 // LIBS
 import { compose } from 'redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Field, InjectedFormProps, reduxForm } from 'redux-form';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -32,6 +33,8 @@ import {
 import { Background, Logo } from '../../assets/images';
 import { colors } from '../../utils/theme';
 import { required } from '../../utils/validate';
+import { RootState } from '../../store';
+import { getLyrics } from '../../actions';
 
 type SearchNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabsParamList, 'Search'>,
@@ -43,7 +46,7 @@ type FormValues = {
   song: string;
 };
 
-type PropsFromRedux = InjectedFormProps<FormValues>;
+type PropsFromRedux = ConnectedProps<typeof connector> & InjectedFormProps<FormValues>;
 type Props = PropsFromRedux & {
   navigation: SearchNavigationProps;
 };
@@ -56,13 +59,26 @@ const ConnectivyComponent = () => (
   </ConnectivityContainer>
 );
 
-const Search = ({ navigation }: Props) => {
+const Search = ({ getLyricsConnected, navigation, searchForm, valid }: Props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const netInfo = useNetInfo();
   const { isConnected } = netInfo;
 
-  const goToLyric = () => {
-    navigation.navigate('SongLyric');
+  const getSongLyrics = async () => {
+    const { values } = searchForm;
+    if (values) {
+      Keyboard.dismiss();
+      getLyricsConnected({
+        artist: values.artist,
+        song: values.song,
+        onSuccess: goToLyrics,
+        onError: handleModalVisibility,
+      });
+    }
+  };
+
+  const goToLyrics = () => {
+    navigation.navigate('SongLyrics');
   };
 
   const handleModalVisibility = useCallback((value: boolean) => {
@@ -81,7 +97,7 @@ const Search = ({ navigation }: Props) => {
               Search
             </Title>
             <Typography color={colors.orange} size={30}>
-              {isConnected ? 'Your Lyric ♫' : 'Not Available'}
+              {isConnected ? 'Your Lyrics ♫' : 'Not Available'}
             </Typography>
             <FormContainer>
               <Field
@@ -98,7 +114,7 @@ const Search = ({ navigation }: Props) => {
                 validate={[required]}
               />
               <Space thickness={isConnected ? 60 : 30} />
-              <SearchButton disabled={!isConnected} onPress={goToLyric}>
+              <SearchButton disabled={!isConnected || !valid} onPress={getSongLyrics}>
                 <Icon color={colors.white} name="search" size={40} />
               </SearchButton>
             </FormContainer>
@@ -116,10 +132,34 @@ const Search = ({ navigation }: Props) => {
   );
 };
 
+const mapStateToProps = ({ form, lyrics }: RootState) => ({
+  error: lyrics.error,
+  loading: lyrics.loading,
+  lyrics: lyrics.lyrics,
+  searchForm: form.searchForm,
+});
+
+const mapDispatchToProps = {
+  getLyricsConnected: ({
+    artist,
+    song,
+    onSuccess,
+    onError,
+  }: {
+    artist: string;
+    song: string;
+    onSuccess: () => void;
+    onError: (value: boolean) => void;
+  }) => getLyrics({ artist, song, onSuccess, onError }),
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
 export default compose<ComponentType<Props>>(
   reduxForm<FormValues>({
     form: 'searchForm',
     destroyOnUnmount: false,
     enableReinitialize: true,
   }),
+  connector,
 )(Search);
