@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StatusBar } from 'react-native';
 
 // LIBS
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,6 +19,7 @@ import NoHistoryPlaceholder from './components/NoHistoryPlaceholder';
 import { colors } from '../../utils/theme';
 import { NativeStyles } from './styles';
 import { HistoryLyricsItem } from '../../utils/types';
+import { isIos } from '../../utils/responsive';
 
 type HistoryNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabsParamList, 'History'>,
@@ -36,23 +37,28 @@ const History = ({ navigation }: Props) => {
   const [historyData, setHistoryData] = useState<HistoryLyricsItem[]>([]);
 
   const getHistory = useCallback(() => {
-    let history;
     const getHistoryData = async () => {
       try {
-        const result = await AsyncStorage.getItem('history');
-        if (result !== JSON.stringify(historyData)) {
-          history = result !== null ? JSON.parse(result) : [];
-          setHistoryData(history);
-        }
+        const history = await AsyncStorage.getItem('history');
+        const parsedHistory = history !== null ? JSON.parse(history) : [];
+        setHistoryData(parsedHistory);
       } catch (err) {
         console.log('Something wrong happened getting the history data');
         return [];
       }
     };
     getHistoryData();
-  }, [historyData]);
+  }, []);
 
-  useFocusEffect(getHistory);
+  useFocusEffect(
+    useCallback(() => {
+      StatusBar.setBarStyle('dark-content');
+      if (!isIos) {
+        StatusBar.setBackgroundColor(colors.white);
+      }
+      getHistory();
+    }, [getHistory]),
+  );
 
   const goToLyric = useCallback(
     (item: HistoryLyricsItem) => {
@@ -72,7 +78,7 @@ const History = ({ navigation }: Props) => {
     setModalVisible(value);
   }, []);
 
-  const clearHistoryHandler = async () => {
+  const clearHistoryHandler = useCallback(async () => {
     try {
       await AsyncStorage.removeItem('history');
       setHistoryData([]);
@@ -80,7 +86,7 @@ const History = ({ navigation }: Props) => {
     } catch (err) {
       console.log('Something wrong happened removing the history data');
     }
-  };
+  }, [handleModalVisibility]);
 
   return (
     <Container style={NativeStyles.mainContainer}>

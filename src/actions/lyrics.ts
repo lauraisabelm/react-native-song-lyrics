@@ -7,13 +7,30 @@ import { SET_LOADING, SET_LYRICS, LyricsActionTypes } from './types';
 import { requestLyric } from '../services';
 import { HistoryLyricsItem } from '../utils/types';
 
+type FoundLyricsInfo = {
+  index: number;
+  lyricsAlreadyExists: boolean;
+};
+
 const checkLyricsExistence = (
   historyData: HistoryLyricsItem[],
   newLyrics: HistoryLyricsItem,
-): boolean => {
-  const foundLyrics = historyData.find((lyrics: HistoryLyricsItem) => lyrics.id === newLyrics.id);
-  const lyricsAlreadyExist = !!foundLyrics;
-  return lyricsAlreadyExist;
+): FoundLyricsInfo => {
+  const foundIndex = historyData.findIndex(
+    (lyrics: HistoryLyricsItem) => lyrics.id === newLyrics.id,
+  );
+  const lyricsAlreadyExists = foundIndex >= 0;
+  const index = foundIndex >= 0 ? foundIndex : 0;
+  return { lyricsAlreadyExists, index };
+};
+
+const relocateExistingLyrics = (
+  historyData: HistoryLyricsItem[],
+  newLyrics: HistoryLyricsItem,
+  index: number,
+): HistoryLyricsItem[] => {
+  historyData.splice(index, 1);
+  return [newLyrics, ...historyData];
 };
 
 const addLyricsToHistoryData = async ({
@@ -28,18 +45,20 @@ const addLyricsToHistoryData = async ({
   try {
     const lyricsData: HistoryLyricsItem = {
       artist,
-      id: `${artist}-${song}`,
+      id: `${artist.toLowerCase().trim()}-${song.toLowerCase().trim()}`,
       lyrics,
       song,
     };
     const historyData = await AsyncStorage.getItem('history');
     const parsedHistoryData = historyData !== null ? JSON.parse(historyData) : [];
-    const lyricsAlreadyExists: boolean = checkLyricsExistence(parsedHistoryData, lyricsData);
-
-    if (!lyricsAlreadyExists) {
-      const newHistoryData: HistoryLyricsItem[] = [lyricsData, ...parsedHistoryData];
-      await AsyncStorage.setItem('history', JSON.stringify(newHistoryData));
+    const { lyricsAlreadyExists, index } = checkLyricsExistence(parsedHistoryData, lyricsData);
+    let newHistoryData: HistoryLyricsItem[];
+    if (lyricsAlreadyExists) {
+      newHistoryData = relocateExistingLyrics(parsedHistoryData, lyricsData, index);
+    } else {
+      newHistoryData = [lyricsData, ...parsedHistoryData];
     }
+    await AsyncStorage.setItem('history', JSON.stringify(newHistoryData));
   } catch (err) {
     console.log(err);
   }

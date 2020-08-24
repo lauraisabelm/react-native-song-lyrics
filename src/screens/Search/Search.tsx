@@ -65,7 +65,7 @@ const lastSearchInitialValue = {
 const ConnectivyComponent = () => (
   <ConnectivityContainer>
     <Typography color={colors.white} size={18} textAlign="center">
-      No internet Connection
+      No Internet Connection
     </Typography>
   </ConnectivityContainer>
 );
@@ -77,29 +77,41 @@ const Search = ({ getLyricsConnected, loading, navigation, searchForm, valid }: 
   const netInfo = useNetInfo();
   const { isConnected } = netInfo;
 
+  const setStatusBarColor = useCallback(() => {
+    if (isConnected) {
+      StatusBar.setBarStyle('dark-content');
+      if (!isIos) {
+        StatusBar.setBackgroundColor(colors.white);
+      }
+    } else {
+      StatusBar.setBarStyle('light-content');
+      if (!isIos) {
+        StatusBar.setBackgroundColor(colors.orange);
+      }
+    }
+  }, [isConnected]);
+
   const getLastSearch = useCallback(() => {
-    let history;
     const getHistoryData = async () => {
       try {
         const result = await AsyncStorage.getItem('history');
-        history = result !== null ? JSON.parse(result) : [];
-        if (history.length > 0) {
-          const lastItem = history[0];
-          if (lastItem.id !== lastSearch.id) {
-            setLastSearch(lastItem);
-          }
-        } else {
-          setLastSearch(lastSearchInitialValue);
-        }
+        const history = result !== null ? JSON.parse(result) : [];
+        const lastItem = history.length > 0 ? history[0] : lastSearchInitialValue;
+        setLastSearch(lastItem);
       } catch (err) {
         console.log('Something wrong happened getting the history data');
         return [];
       }
     };
     getHistoryData();
-  }, [lastSearch.id]);
+  }, []);
 
-  useFocusEffect(getLastSearch);
+  useFocusEffect(
+    useCallback(() => {
+      setStatusBarColor();
+      getLastSearch();
+    }, [getLastSearch, setStatusBarColor]),
+  );
 
   const goToLyrics = useCallback(
     (songData?: HistoryLyricsItem) => {
@@ -131,10 +143,6 @@ const Search = ({ getLyricsConnected, loading, navigation, searchForm, valid }: 
 
   return (
     <Container style={{ backgroundColor: isConnected ? colors.white : colors.orange }}>
-      <StatusBar
-        backgroundColor={colors.white}
-        barStyle={isConnected ? 'dark-content' : 'light-content'}
-      />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <BackgroundContainer resizeMode="cover" source={Background}>
           {!isConnected && ConnectivyComponent()}
