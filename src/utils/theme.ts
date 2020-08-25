@@ -10,6 +10,5 @@ export const colors = {
   orange: '#fe9632',
   orangeOpacity40: 'rgba(254, 150, 50, 0.4)',
   white: '#fff',
-  whiteOpacity: 'rgba(255, 255, 255, 0.9)',
   whiteSmoke: '#f0f0f0',
 };

@@ -93,7 +93,7 @@ const History = ({ navigation }: Props) => {
       <Header
         backgroundColor={colors.white}
         colorTitle={colors.dimGray}
-        withoutArrow
+        withArrow={false}
         title="History"
       />
       <FlatList
@@ -105,7 +105,7 @@ const History = ({ navigation }: Props) => {
         style={NativeStyles.flatlist}
       />
       {historyData.length > 0 && (
-        <FloatingButton onPressClearHistory={handleModalVisibility.bind(null, true)} />
+        <FloatingButton onButtonPress={handleModalVisibility.bind(null, true)} />
       )}
       <CustomAlert
         isVisible={isModalVisible}

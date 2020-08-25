@@ -1,8 +1,9 @@
-// REACT NATIVE
 import { TextInput, View } from 'react-native';
 
-// STYLED
+// LIBS
 import styled from 'styled-components';
+
+// RESOURCES
 import { colors } from '../../utils/theme';
 
 export const Content = styled(View)({

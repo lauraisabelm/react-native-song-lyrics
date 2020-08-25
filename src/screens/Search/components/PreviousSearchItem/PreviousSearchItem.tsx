@@ -3,7 +3,7 @@ import React from 'react';
 // LIBS
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-// COMPONENT
+// COMPONENTS
 import { Space, Typography } from '../../../../components';
 
 // RESOURCES

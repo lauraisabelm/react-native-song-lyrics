@@ -2,7 +2,16 @@
 
 This is a Sample React Native App with RN63 developed with Hooks, Typescript and Redux. Lyrics are retrieved from the ​https://lyricsovh.docs.apiary.io/​ Rest API.
 
-![Structure](https://drive.google.com/uc?export=view&id=1lNvfVbV69GXkKGuN3kWhZHZdx1QNy3G7)
+![App](https://drive.google.com/uc?export=view&id=1lNvfVbV69GXkKGuN3kWhZHZdx1QNy3G7)
+
+
+Song Lyrics App lets you:
+
+- Search song lyrics by typing the name of the artist and of the song. You must write the complete names, otherwise you'll get an error message, that will also appear if unexpected things occured and the search is not successfull. It's important to mention that this search functionality is not available if you don't have internet connection.
+- See the complete lyrics and the corresponding artist and song names in a new screen.
+- Have access to the last lyrics successfully retrieved after a search (only if there was a previous successful search). This functionality is available even if you don't have internet connection.
+- Have access to a history section where you can find a list of all successful song lyrics searches. If you tap on any item of the list, you'll redirected to a new screen with the lyrics of the selected song item. This section is available with no internet access.
+- Be able to clean the history data.
 
 ## iOS Video
 https://drive.google.com/file/d/1dvYYfFqZifhGR6YX1NV23YSLmaxwAzs-/view?usp=sharing

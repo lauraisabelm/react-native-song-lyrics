@@ -1,4 +1,3 @@
-// REACT NATIVE
 import * as React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
@@ -14,13 +13,13 @@ interface Props {
   colorTitle: string;
   onPressArrow?: () => void;
   title: string;
-  withoutArrow: boolean;
+  withArrow: boolean;
 }
 
-const Header = ({ backgroundColor, colorTitle, onPressArrow, title, withoutArrow }: Props) => {
+const Header = ({ backgroundColor, colorTitle, onPressArrow, title, withArrow }: Props) => {
   return (
     <Container backgroundColor={backgroundColor} style={NativeStyles.shadow}>
-      {!withoutArrow && (
+      {withArrow && (
         <TouchableWithoutFeedback onPress={onPressArrow}>
           <Icon color={colors.white} name="arrow-back" size={30} />
         </TouchableWithoutFeedback>
@@ -35,7 +34,7 @@ const Header = ({ backgroundColor, colorTitle, onPressArrow, title, withoutArrow
 Header.defaultProps = {
   backgroundColor: colors.blue,
   colorTitle: colors.white,
-  withoutArrow: false,
+  withArrow: true,
 };
 
 export default Header;

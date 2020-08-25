@@ -1,5 +1,6 @@
 import React from 'react';
 
+// RESOURCES
 import { StyledText } from './styles';
 import { colors } from '../../utils/theme';
 

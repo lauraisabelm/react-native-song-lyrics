@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native';
+
 // LIBS
 import styled from 'styled-components/native';
 
@@ -6,7 +8,6 @@ import Typography from '../Typography';
 
 // RESOURCES
 import { colors } from '../../utils/theme';
-import { StyleSheet } from 'react-native';
 
 type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse';
 
